@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootsrap link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- style link -->
+    <link rel="stylesheet" href="css/main.css">
+
+
+
+    <title>Document</title>
+</head>
+<body>
+    
+    <input id="contact-form-text" type="text" placeholder="Ismingizni kiriting">
+    <span id="text-error" class="error-message">Iltimos, maydonni to'ldiring</span>
+    <br>
+    <input id="contact-form-number" type="text" placeholder="Yoshingizni kiriting">
+    <span id="number-error" class="error-message">Iltimos, maydonni to'ldiring</span>
+    <br>
+    <button id="contact-form-button" type="button">Yubor</button>
+
+
+
+<script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+            var textInput = document.getElementById('contact-form-text');
+            var numberInput = document.getElementById('contact-form-number');
+            var submitButton = document.getElementById('contact-form-button');
+
+            var textError = document.getElementById('text-error');
+            var numberError = document.getElementById('number-error');
+
+            function checkInputs() {
+                var textIsValid = textInput.value.trim() !== '';
+                var numberIsValid = numberInput.value.trim() !== '';
+
+                if (textIsValid) {
+                    textError.style.display = 'none';
+                }
+
+                if (numberIsValid) {
+                    numberError.style.display = 'none';
+                }
+
+                return textIsValid && numberIsValid;
+            }
+
+            submitButton.addEventListener('click', function() {
+                var textIsValid = textInput.value.trim() !== '';
+                var numberIsValid = numberInput.value.trim() !== '';
+
+                if (!textIsValid) {
+                    textError.style.display = 'inline';
+                }
+
+                if (!numberIsValid) {
+                    numberError.style.display = 'inline';
+                }
+
+                if (textIsValid && numberIsValid) {
+                    // Form submission logic here
+                    alert('Form submitted successfully!');
+                }
+            });
+
+            textInput.addEventListener('input', checkInputs);
+            numberInput.addEventListener('input', checkInputs);
+        });
+  
+    document.getElementById('contact-form-button').addEventListener('click', function() {
+        setTimeout(function() {
+            document.getElementById('contact-form-text').value = '';
+            document.getElementById('contact-form-number').value = '';
+        }, 2000); // 2 soniya keyin inputlar tozalanadi
+    });
+</script>
+
+
+<h1>Products</h1>
+<button id="load-data">So'ngi ma'lumotlar</button>
+<div id="product-list"></div>
+
+
+
+
+<script>
+   
+</script>
+
+<script src="js/app.js"></script>
+
+
+</body>
+</html>

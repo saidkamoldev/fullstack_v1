@@ -1,0 +1,54 @@
+package main
+
+import (
+	"net/http"
+	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/cors"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+type Product struct {
+	gorm.Model
+	Name  string
+	Age   string
+}
+
+func main() {
+	router := gin.Default()
+
+	// CORS sozlamalari
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://127.0.0.1:5500"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+	router.Use(cors.New(config))
+
+	// Database connection
+	dsn := "host=localhost user=saidkamol password=123456 dbname=mygo port=5432 sslmode=disable"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+	db.AutoMigrate(&Product{})
+
+	// Router handlers
+	router.GET("/products", func(c *gin.Context) {
+		var products []Product
+		db.Find(&products)
+		c.JSON(http.StatusOK, products)
+	})
+
+	router.POST("/products", func(c *gin.Context) {
+		var product Product
+		if err := c.ShouldBindJSON(&product); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		db.Create(&product)
+		c.JSON(http.StatusOK, product)
+	})
+
+	// Run the server
+	router.Run(":8080")
+}
